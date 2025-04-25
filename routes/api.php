@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CanHoController;
 use App\Http\Controllers\CuDanController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,5 +33,11 @@ Route::group(['prefix'  =>  '/admin'], function () {
         Route::post('/doi-trang-thai', [CuDanController::class, 'doiTrangThaiCuDan']);
         Route::delete('/thong-tin-xoa/{id}', [CuDanController::class, 'xoaCuDan']);
         Route::post('/doi-mat-khau', [CuDanController::class, 'doiPass']);
+    });
+    Route::group(['prefix'  =>  '/can-ho'], function () {
+        Route::get('/lay-du-lieu', [CanHoController::class, 'getData']);
+        Route::post('/them-du-lieu', [CanHoController::class, 'themCanHo']);
+        Route::post('/thong-tin-cap-nhat', [CanHoController::class, 'capnhatCanHo']);
+        Route::delete('/thong-tin-xoa/{id}', [CanHoController::class, 'xoaCanHo']);
     });
 });
