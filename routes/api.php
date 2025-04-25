@@ -11,3 +11,6 @@ Route::get('/user', function (Request $request) {
 Route::post('/admin/login', [AdminController::class, 'login']);
 Route::post('/admin/register', [AdminController::class, 'register']);
 Route::get('/admin/check-token', [AdminController::class, 'checkToken']);
+Route::post('/admin/logout', [AdminController::class, 'logout']);
+
+
