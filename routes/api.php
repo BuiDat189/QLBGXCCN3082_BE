@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CanHoController;
 use App\Http\Controllers\CuDanController;
+use App\Http\Controllers\XeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,5 +40,12 @@ Route::group(['prefix'  =>  '/admin'], function () {
         Route::post('/them-du-lieu', [CanHoController::class, 'themCanHo']);
         Route::post('/thong-tin-cap-nhat', [CanHoController::class, 'capnhatCanHo']);
         Route::delete('/thong-tin-xoa/{id}', [CanHoController::class, 'xoaCanHo']);
+    });
+    Route::group(['prefix'  =>  '/Xe'], function () {
+        Route::get('/lay-du-lieu', [XeController::class, 'getData']);
+        Route::post('/them-du-lieu', [XeController::class, 'themXe']);
+        Route::post('/thong-tin-cap-nhat', [XeController::class, 'capnhatXe']);
+        Route::post('/doi-trang-thai', [XeController::class, 'doiTrangThaiXe']);
+        Route::delete('/thong-tin-xoa/{id}', [XeController::class, 'xoaXe']);
     });
 });
