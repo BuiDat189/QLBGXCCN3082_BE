@@ -6,6 +6,7 @@ use App\Http\Controllers\ChiTietChucVuController;
 use App\Http\Controllers\ChucNangController;
 use App\Http\Controllers\ChucVuController;
 use App\Http\Controllers\CuDanController;
+use App\Http\Controllers\ViTriDatController;
 use App\Http\Controllers\XeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -68,5 +69,12 @@ Route::group(['prefix'  =>  '/admin'], function () {
         Route::post('/thong-tin-cap-nhat', [XeController::class, 'capnhatXe']);
         Route::post('/doi-trang-thai', [XeController::class, 'doiTrangThaiXe']);
         Route::delete('/thong-tin-xoa/{id}', [XeController::class, 'xoaXe']);
+    });
+
+    Route::group(['prefix'  =>  '/vi-tri-dat'], function () {
+        Route::get('/lay-du-lieu', [ViTriDatController::class, 'getData']);
+        Route::post('/them-du-lieu', [ViTriDatController::class, 'themViTriDat']);
+        Route::post('/thong-tin-cap-nhat', [ViTriDatController::class, 'capnhatViTriDat']);
+        Route::delete('/thong-tin-xoa/{id}', [ViTriDatController::class, 'xoaViTriDat']);
     });
 });
