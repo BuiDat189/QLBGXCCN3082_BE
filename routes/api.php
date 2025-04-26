@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CanHoController;
+use App\Http\Controllers\ChucVuController;
 use App\Http\Controllers\CuDanController;
 use App\Http\Controllers\XeController;
 use Illuminate\Http\Request;
@@ -11,10 +12,10 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/admin/login', [AdminController::class, 'login']);
-Route::post('/admin/register', [AdminController::class, 'register']);
-Route::get('/admin/check-token', [AdminController::class, 'checkToken']);
-Route::post('/admin/logout', [AdminController::class, 'logout']);
+    Route::post('/admin/login', [AdminController::class, 'login']);
+    Route::post('/admin/register', [AdminController::class, 'register']);
+    Route::get('/admin/check-token', [AdminController::class, 'checkToken']);
+    Route::post('/admin/logout', [AdminController::class, 'logout']);
 
 
 Route::group(['prefix'  =>  '/admin'], function () {
@@ -26,6 +27,12 @@ Route::group(['prefix'  =>  '/admin'], function () {
     Route::post('/thong-tin-tim', [AdminController::class, 'timAdmin']);
     Route::post('/doi-mat-khau', [AdminController::class, 'doiPass']);
     Route::get('/lay-du-lieu-profile', [AdminController::class, 'getDataProfile']);
+
+    Route::group(['prefix'  =>  '/chuc-vu'], function () {
+        Route::get('/lay-du-lieu', [ChucVuController::class, 'getData']);
+
+    });
+
 
     Route::group(['prefix'  =>  '/cu-dan'], function () {
         Route::get('/lay-du-lieu', [CuDanController::class, 'getData']);
