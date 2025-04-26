@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CanHoController;
+use App\Http\Controllers\ChiTietChucVuController;
+use App\Http\Controllers\ChucNangController;
 use App\Http\Controllers\ChucVuController;
 use App\Http\Controllers\CuDanController;
 use App\Http\Controllers\XeController;
@@ -36,6 +38,13 @@ Route::group(['prefix'  =>  '/admin'], function () {
         Route::delete('/thong-tin-xoa/{id}', [ChucVuController::class, 'xoaChucVu']);
         Route::post('/thong-tin-tim', [ChucVuController::class, 'timChucVu']);
 
+    });
+
+    Route::group(['prefix'  =>  '/phan-quyen'], function () {
+        Route::get('/data/{id_chuc_vu}', [ChiTietChucVuController::class, 'getData']);
+        Route::post('/phan-quyen-chuc-vu/create', [ChiTietChucVuController::class, 'store']);
+        Route::post('/phan-quyen-chuc-vu/delete', [ChiTietChucVuController::class, 'destroy']);
+        Route::get('/chuc-nang/data', [ChucNangController::class, 'getData']);
     });
 
 
