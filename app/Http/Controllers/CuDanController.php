@@ -22,7 +22,7 @@ class CuDanController extends Controller
     public function themCuDan(ThemCuDanRequest $request)
     {
         CuDan::create([
-           'ho_va_ten' => $request->ho_va_ten,
+            'ho_va_ten' => $request->ho_va_ten,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'so_dien_thoai' => $request->so_dien_thoai,
