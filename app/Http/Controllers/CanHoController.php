@@ -38,6 +38,8 @@ class CanHoController extends Controller
                 'tang'       => $request->tang,
                 'so_can_ho'  => $request->so_can_ho,
                 'chu_ho'     => $request->chu_ho,
+                 'ten_toa_nha'     => $request->ten_toa_nha,
+
             ]);
             return response()->json([
                 'status'   => true,
