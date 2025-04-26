@@ -30,6 +30,11 @@ Route::group(['prefix'  =>  '/admin'], function () {
 
     Route::group(['prefix'  =>  '/chuc-vu'], function () {
         Route::get('/lay-du-lieu', [ChucVuController::class, 'getData']);
+        Route::post('/them-du-lieu', [ChucVuController::class, 'themChucVu']);
+        Route::post('/thong-tin-cap-nhat', [ChucVuController::class, 'capnhatChucVu']);
+        Route::post('/doi-trang-thai', [ChucVuController::class, 'doiTrangThaiChucVu']);
+        Route::delete('/thong-tin-xoa/{id}', [ChucVuController::class, 'xoaChucVu']);
+        Route::post('/thong-tin-tim', [ChucVuController::class, 'timChucVu']);
 
     });
 
