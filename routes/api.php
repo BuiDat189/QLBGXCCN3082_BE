@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BaiXeController;
 use App\Http\Controllers\CanHoController;
 use App\Http\Controllers\ChiTietChucVuController;
 use App\Http\Controllers\ChucNangController;
@@ -80,5 +81,12 @@ Route::group(['prefix'  =>  '/admin'], function () {
     });
     Route::group(['prefix'  =>  '/lich-su-ra-vao'], function () {
         Route::get('/lay-du-lieu', [LichSuRaVaoBaiXeController::class, 'getLichSuRaVao']);
+    });
+
+    Route::group(['prefix'  =>  '/bai-xe'], function () {
+        Route::get('/lay-du-lieu', [BaiXeController::class, 'getData']);
+        Route::post('/them-du-lieu', [BaiXeController::class, 'themBaiXe']);
+        Route::post('/thong-tin-cap-nhat', [BaiXeController::class, 'capnhatBaiXe']);
+        Route::delete('/thong-tin-xoa/{id}', [BaiXeController::class, 'xoaBaiXe']);
     });
 });
