@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminThongBaoController;
 use App\Http\Controllers\BaiXeController;
 use App\Http\Controllers\CanHoController;
 use App\Http\Controllers\ChiTietChucVuController;
 use App\Http\Controllers\ChucNangController;
 use App\Http\Controllers\ChucVuController;
 use App\Http\Controllers\CuDanController;
+use App\Http\Controllers\GiaoDichController;
 use App\Http\Controllers\LichSuRaVaoBaiXeController;
 use App\Http\Controllers\ViTriDatController;
 use App\Http\Controllers\XeController;
@@ -83,10 +85,18 @@ Route::group(['prefix'  =>  '/admin'], function () {
         Route::get('/lay-du-lieu', [LichSuRaVaoBaiXeController::class, 'getLichSuRaVao']);
     });
 
+    Route::group(['prefix'  =>  '/giao-dich'], function () {
+        Route::get('/lay-du-lieu', [GiaoDichController::class, 'getData']);
+    });
+
     Route::group(['prefix'  =>  '/bai-xe'], function () {
         Route::get('/lay-du-lieu', [BaiXeController::class, 'getData']);
         Route::post('/them-du-lieu', [BaiXeController::class, 'themBaiXe']);
         Route::post('/thong-tin-cap-nhat', [BaiXeController::class, 'capnhatBaiXe']);
         Route::delete('/thong-tin-xoa/{id}', [BaiXeController::class, 'xoaBaiXe']);
+    });
+
+    Route::group(['prefix'  =>  '/thong-bao'], function () {
+        Route::get('/lay-du-lieu', [AdminThongBaoController::class, 'getData']);
     });
 });

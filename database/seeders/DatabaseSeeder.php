@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             XeSeeder::class,
             LichSuRaVaoBaiXeSeeder::class,
             BaiXeSeeder::class,
+            GiaoDichSeeder::class,
+            AdminThongBaoSeeder::class,
         ]);
     }
 }
