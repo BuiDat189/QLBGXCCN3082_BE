@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             BaiXeSeeder::class,
             GiaoDichSeeder::class,
             AdminThongBaoSeeder::class,
+            LoaiXeSeeder::class
         ]);
     }
 }

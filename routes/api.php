@@ -10,6 +10,7 @@ use App\Http\Controllers\ChucVuController;
 use App\Http\Controllers\CuDanController;
 use App\Http\Controllers\GiaoDichController;
 use App\Http\Controllers\LichSuRaVaoBaiXeController;
+use App\Http\Controllers\LoaiXeController;
 use App\Http\Controllers\ViTriDatController;
 use App\Http\Controllers\XeController;
 use Illuminate\Http\Request;
@@ -99,4 +100,13 @@ Route::group(['prefix'  =>  '/admin'], function () {
     Route::group(['prefix'  =>  '/thong-bao'], function () {
         Route::get('/lay-du-lieu', [AdminThongBaoController::class, 'getData']);
     });
+
+    Route::group(['prefix'  =>  '/loai-xe'], function () {
+        Route::get('/lay-du-lieu', [LoaiXeController::class, 'getData']);
+        Route::post('/them-du-lieu', [LoaiXeController::class, 'themLoaiXe']);
+        Route::post('/thong-tin-cap-nhat', [LoaiXeController::class, 'capnhatLoaiXe']);
+        Route::post('/doi-trang-thai', [LoaiXeController::class, 'doiTrangThaiLoaiXe']);
+        Route::delete('/thong-tin-xoa/{id}', [LoaiXeController::class, 'xoaLoaiXe']);
+    });
+
 });
