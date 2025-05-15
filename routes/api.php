@@ -7,13 +7,16 @@ use App\Http\Controllers\BaoCaoKhachVangLaiController;
 use App\Http\Controllers\BaoCaoSuCoController;
 use App\Http\Controllers\CamGiamSoatController;
 use App\Http\Controllers\CanHoController;
+use App\Http\Controllers\ChiTietBaiXeController;
 use App\Http\Controllers\ChiTietChucVuController;
 use App\Http\Controllers\ChucNangController;
 use App\Http\Controllers\ChucVuController;
 use App\Http\Controllers\CuDanController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GiaoDichController;
 use App\Http\Controllers\LichSuRaVaoBaiXeController;
 use App\Http\Controllers\LoaiXeController;
+use App\Http\Controllers\RaVaoBaicontroller;
 use App\Http\Controllers\ViTriDatController;
 use App\Http\Controllers\XeController;
 use Database\Seeders\BaoCaoKhachVangLaiSeeder;
@@ -92,9 +95,20 @@ Route::group(['prefix'  =>  '/admin'], function () {
         Route::delete('/thong-tin-xoa/{id}', [LoaiXeController::class, 'xoaLoaiXe']);
     });
 
+    Route::group(['prefix'  =>  '/ra-vao-bai'], function () {
+        Route::get('/lay-du-lieu', [RaVaoBaicontroller::class, 'getData']);
+        Route::post('/them-du-lieu', [RaVaoBaicontroller::class, 'themLichSuRaVao']);
+        Route::post('/ghi-nhan-xe-vao', [RaVaoBaicontroller::class, 'ghiNhanXeVao']);
+        Route::post('/ghi-nhan-xe-ra', [RaVaoBaicontroller::class, 'ghiNhanXeRa']);
+        Route::post('/dat-truoc', [RaVaoBaicontroller::class, 'datTruoc']);
+    });
 
-    Route::group(['prefix'  =>  '/lich-su-ra-vao'], function () {
-        Route::get('/lay-du-lieu', [LichSuRaVaoBaiXeController::class, 'getLichSuRaVao']);
+    Route::group(['prefix'  =>  '/lich-su-ra-vao-bai'], function () {
+        Route::get('/lay-du-lieu', [LichSuRaVaoBaiXeController::class, 'getData']);
+        Route::post('/them-du-lieu', [LichSuRaVaoBaiXeController::class, 'themLichSuRaVao']);
+        Route::post('/ghi-nhan-xe-vao', [LichSuRaVaoBaiXeController::class, 'ghiNhanXeVao']);
+        Route::post('/ghi-nhan-xe-ra', [LichSuRaVaoBaiXeController::class, 'ghiNhanXeRa']);
+        Route::post('/dat-truoc', [LichSuRaVaoBaiXeController::class, 'datTruoc']);
     });
 
     Route::group(['prefix'  =>  '/thong-bao'], function () {
@@ -134,6 +148,7 @@ Route::group(['prefix'  =>  '/admin'], function () {
         Route::post('/thong-tin-cap-nhat', [BaoCaoKhachVangLaiController::class, 'capnhatBaoCaoKhachVangLai']);
         Route::delete('/thong-tin-xoa/{id}', [BaoCaoKhachVangLaiController::class, 'xoaBaoCaoKhachVangLai']);
         Route::post('/thanh-toan', [BaoCaoKhachVangLaiController::class, 'thanhToanBaoCaoKhachVangLai']);
+        Route::post('/xoa-du-lieu', [BaoCaoKhachVangLaiController::class, 'xoaBaoCaoKhachVangLai']);
 
     });
 
@@ -142,7 +157,13 @@ Route::group(['prefix'  =>  '/admin'], function () {
         Route::post('/them-du-lieu', [BaoCaoSuCoController::class, 'themBaoCaoSuCo']);
         Route::post('/thong-tin-cap-nhat', [BaoCaoSuCoController::class, 'capnhatBaoCaoSuCo']);
         Route::delete('/thong-tin-xoa/{id}', [BaoCaoSuCoController::class, 'xoaBaoCaoSuCo']);
+        Route::post('/xu-ly-bao-cao', [BaoCaoSuCoController::class, 'xuLyBaoCaoSuCo']);
     });
+
+    Route::group(['prefix'  =>  '/chi-tiet-bai-xe'], function () {
+        Route::get('/lay-du-lieu', [ChiTietBaiXeController::class, 'getData']);
+    });
+
 
 
 
@@ -172,5 +193,5 @@ Route::post('/user/logout', [CuDanController::class, 'logout']);
 
 Route::group(['prefix'  =>  '/user'], function () {
 
+    Route::get('/profile', [CuDanController::class, 'getProfile']);
 });
-
