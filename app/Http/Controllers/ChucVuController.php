@@ -17,7 +17,6 @@ class ChucVuController extends Controller
             'data' => $chucvu
         ]);
     }
-
     public function themChucVu(TaoChucVuRequest $request)
     {
         ChucVu::create([
@@ -30,7 +29,18 @@ class ChucVuController extends Controller
             'message'  => 'Bạn thêm Chức Vụ thành công!',
         ]);
     }
+    public function timChucVu(Request $request)
+    {
+        $key    = '%' . $request->key . '%';
+        $dataAdmin   = ChucVu::select('chuc_vus.*')
+            ->where('ten_chuc_vu', 'like', $key)
+            ->get(); // get là ra 1  sách
 
+
+        return response()->json([
+            'chuc_vu_admin'  =>  $dataAdmin,
+        ]);
+    }
     public function capnhatChucVu(Request $request)
     {
         $chucvu = ChucVu::find($request->id);
@@ -50,7 +60,6 @@ class ChucVuController extends Controller
             ]);
         }
     }
-
     public function doiTrangThaiChucVu(Request $request)
     {
         $chucvu = ChucVu::find($request->id);
@@ -69,7 +78,6 @@ class ChucVuController extends Controller
             ]);
         }
     }
-
     public function xoaChucVu(Request $request)
     {
         $chucvu = ChucVu::find($request->id);
@@ -85,17 +93,5 @@ class ChucVuController extends Controller
                 'message'  => 'Chức Vụ không tồn tại!',
             ]);
         }
-    }
-
-    public function timChucVu(Request $request)
-    {
-        $key    = '%' . $request->key . '%';
-        $dataAdmin   = ChucVu::select('chuc_vus.*')
-            ->where('ten_chuc_vu', 'like', $key)
-            ->get(); // get là ra 1  sách
-
-        return response()->json([
-            'chuc_vu_admin'  =>  $dataAdmin,
-        ]);
     }
 }

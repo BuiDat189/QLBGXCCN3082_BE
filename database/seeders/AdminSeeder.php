@@ -66,4 +66,3 @@ class AdminSeeder extends Seeder
         }
     }
 }
-

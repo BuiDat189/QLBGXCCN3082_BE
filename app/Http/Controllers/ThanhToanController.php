@@ -172,7 +172,7 @@ class ThanhToanController extends Controller
             'ma_giao_dich' => 'HD0' . substr(md5($id_xe . time()), 0, 5),
             'id_xe' => $id_xe,
             'phuong_thuc_thanh_toan' => GiaoDich::PHUONG_THUC_THANH_TOAN_TIEN_MAT,
-            'ngay_het_han' => Carbon::now('Asia/Ho_Chi_Minh'),
+            'ngay_het_han' => null,
             'trang_thai_giao_dich' => GiaoDich::TRANG_THAI_GIAO_DICH_CHUA_THANH_TOAN
         ]);
 
@@ -193,12 +193,31 @@ class ThanhToanController extends Controller
     {
         $hoaDon = GiaoDich::find($request->id);
         $xe = Xe::find($hoaDon->id_xe);
-        $hoaDon->update(['trang_thai_giao_dich' => 1]);
+        $hoaDon->update(['trang_thai_giao_dich' => 1, 'ngay_het_han' => Carbon::now('Asia/Ho_Chi_Minh')->addMonths(1)]);
         $xe->update(['is_con_han' => 1]);
         $xe->save();
         return response()->json([
             'status' => true,
             'message' => 'Cập nhật giao dịch thành công.'
         ], 200);
+    }
+    public function getDataThanhToanClient(Request $request)
+    {
+        $user = $this->isCuDan();
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Không tìm thấy thông tin người dùng.'
+            ]);
+        }
+        $hoaDon = GiaoDich::join('xes', 'giao_diches.id_xe', '=', 'xes.id')
+            ->join('cu_dans', 'xes.id_cu_dan', '=', 'cu_dans.id')
+            ->where('xes.id_cu_dan', $user->id)
+            ->select('giao_diches.*', 'xes.bien_so_xe', 'cu_dans.ho_va_ten')
+            ->get();
+        return response()->json([
+            'status' => true,
+            'data' => $hoaDon,
+        ]);
     }
 }

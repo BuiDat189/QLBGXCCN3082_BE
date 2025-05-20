@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\capNhatCuDanRequest;
+use App\Http\Requests\capNhatProfileRequest;
 use App\Http\Requests\DoiPassAdminReuqest;
 use App\Http\Requests\ThemCuDanRequest;
 use App\Models\CuDan;
+use App\Models\Xe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -61,6 +63,14 @@ class CuDanController extends Controller
     }
     public function themCuDan(ThemCuDanRequest $request)
     {
+         $id_chuc_nang = 3;
+        $check = $this->checkQuyen($id_chuc_nang);
+        if ($check == false) {
+            return response()->json([
+                'status'  =>  false,
+                'message' =>  'Bạn không có quyền chức năng này'
+            ]);
+        }
         CuDan::create([
             'ho_va_ten' => $request->ho_va_ten,
             'email' => $request->email,
@@ -76,6 +86,14 @@ class CuDanController extends Controller
     }
     public function capnhatCuDan(capNhatCuDanRequest $request)
     {
+        $id_chuc_nang = 3;
+        $check = $this->checkQuyen($id_chuc_nang);
+        if ($check == false) {
+            return response()->json([
+                'status'  =>  false,
+                'message' =>  'Bạn không có quyền chức năng này'
+            ]);
+        }
         $cudan = CuDan::find($request->id);
         if ($cudan) {
             $cudan->update([
@@ -98,6 +116,15 @@ class CuDanController extends Controller
     }
     public function doiTrangThaiCuDan(Request $request)
     {
+
+        $id_chuc_nang = 3;
+        $check = $this->checkQuyen($id_chuc_nang);
+        if ($check == false) {
+            return response()->json([
+                'status'  =>  false,
+                'message' =>  'Bạn không có quyền chức năng này'
+            ]);
+        }
         $cudan = CuDan::find($request->id);
         if ($cudan) {
             $cudan->update([
@@ -116,6 +143,7 @@ class CuDanController extends Controller
     }
     public function xoaCuDan(Request $request)
     {
+
         $cudan = CuDan::find($request->id);
         if ($cudan) {
             $cudan->delete();
@@ -132,14 +160,32 @@ class CuDanController extends Controller
     }
     public function doiPass(DoiPassAdminReuqest $request)
     {
-        $dangLogin = $this->isAdmin();
-
-        $cudan = CuDan::find($request->id);
-
-        CuDan::where('id', $request->id)
-            ->update([
-                'password'   => bcrypt($request->password),
+        $dangLogin = $this->isCuDan();
+        if (!$dangLogin) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Bạn chưa đăng nhập tài khoản cư dân'
             ]);
+        }
+
+        $check = Auth::guard('cu_dan')->attempt(['email' => $dangLogin->email, 'password' => $request->current_password,]);
+        if (!$check) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Mật khẩu hiện tại không đúng'
+            ]);
+        }
+
+        $cudan = CuDan::find($dangLogin->id);
+        if (!$cudan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Cư dân không tồn tại'
+            ]);
+        }
+        $cudan->update([
+            'password'   => bcrypt($request->password),
+        ]);
         return response()->json([
             'status'  =>  true,
             'message' =>  'Đổi mật khẩu thành công'
@@ -233,6 +279,14 @@ class CuDanController extends Controller
     public function duyetCuDan(Request $request)
     {
 
+        $id_chuc_nang = 6;
+        $check = $this->checkQuyen($id_chuc_nang);
+        if ($check == false) {
+            return response()->json([
+                'status'  =>  false,
+                'message' =>  'Bạn không có quyền chức năng này'
+            ]);
+        }
 
         $cudan = CuDan::find($request->id);
         if (!$cudan) {
@@ -260,7 +314,15 @@ class CuDanController extends Controller
             ->leftJoin('giao_diches', 'giao_diches.id_xe', '=', 'xes.id')
             ->where('cu_dans.id', $user->id)
             ->select('cu_dans.*', 'can_hos.ten_toa_nha','can_hos.so_can_ho', 'xes.bien_so_xe', 'loai_xes.ten_loai_xe', 'giao_diches.ngay_het_han')
+            ->orderBy('giao_diches.ngay_het_han', 'desc')
             ->first();
+        // $lich_su_thanh_toan = DB::table('giao_diches')->where('id_xe', $user->id)->orderBy('created_at', 'desc')->get();
+        $xe = Xe::join('giao_diches', 'giao_diches.id_xe', '=', 'xes.id')
+            ->where('xes.id_cu_dan', $user->id)
+            ->whereNotNull('giao_diches.ngay_het_han')
+            ->select('xes.bien_so_xe', 'giao_diches.ngay_het_han','giao_diches.ma_giao_dich')
+            ->orderBy('xes.created_at', 'desc')
+            ->get();
         $lich_su_login = DB::table('personal_access_tokens')->where('name', "cu_dan_token")->select('id', 'created_at', 'updated_at')->get();
         if (!$user) {
             return response()->json([
@@ -272,7 +334,22 @@ class CuDanController extends Controller
             'status' => true,
             'message' => 'Lấy thông tin cư dân thành công',
             'data' => $cudan,
-            'lich_su_login' => $lich_su_login
+            'lich_su_login' => $lich_su_login,
+            'lich_su_thanh_toan' => $xe
+        ]);
+    }
+    public function capnhatProfile(capNhatProfileRequest $request)
+    {
+        $user = $this->isCuDan();
+        $user->update([
+            'ho_va_ten' => $request->ho_va_ten,
+            'so_dien_thoai' => $request->so_dien_thoai,
+            // 'id_can_ho' => $request->id_can_ho,
+        ]);
+        return response()->json([
+            'status' => true,
+            'message' => 'Cập nhật thông tin cư dân thành công',
+            'data' => $user
         ]);
     }
 }

@@ -15,4 +15,8 @@ class ChucNangController extends Controller
             'data' => $data,
         ]);
     }
+
+
+
+
 }

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+
 class AdminController extends Controller
 {
     public function login(Request $request)
@@ -24,10 +25,14 @@ class AdminController extends Controller
                     'message' => "Tài khoản của bạn đã bị khóa!"
                 ]);
             } else {
+                $chuc_vu = ChucVu::join('admins', 'chuc_vus.id', '=', 'admins.id_chuc_vu')
+                    ->where('admins.id', $user->id)
+                    ->select('admins.ho_va_ten', 'chuc_vus.ten_chuc_vu')
+                    ->first();
                 return response()->json([
                     'status' => true,
                     'message' => "Đăng nhập thành công!",
-                    'user' => $user,
+                    'user' => $chuc_vu,
                     'token' => $user->createToken('admin_token')->plainTextToken
                 ]);
             }
@@ -75,10 +80,15 @@ class AdminController extends Controller
         $user = $this->isAdmin();
 
         if ($user) {
+
+            $chuc_vu = ChucVu::join('admins', 'chuc_vus.id', '=', 'admins.id_chuc_vu')
+                ->where('admins.id', $user->id)
+                ->select('admins.ho_va_ten', 'chuc_vus.ten_chuc_vu')
+                ->first();
             return response()->json([
                 'message'   => 'Token còn hiệu lực',
                 'status'    => true,
-                'user'      => $user
+                'user'      => $chuc_vu,
             ]);
         }
         return response()->json([
@@ -153,10 +163,11 @@ class AdminController extends Controller
                 'ho_va_ten'     => $request->ho_va_ten,
                 'id_chuc_vu'    => $request->id_chuc_vu,
                 'so_dien_thoai' => $request->so_dien_thoai,
+                'is_block'      => $request->is_block,
             ]);
         return response()->json([
-            'status'     => false,
-            'message'    => 'Cập nhật trạng thái không thành công!!'
+            'status'     => true,
+            'message'    => 'Cập nhật thành công!!'
         ]);
     }
     public function doiTrangThaiAdmin(Request $request)

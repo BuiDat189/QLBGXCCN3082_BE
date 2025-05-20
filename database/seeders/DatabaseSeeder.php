@@ -23,12 +23,18 @@ class DatabaseSeeder extends Seeder
             CanHoSeeder::class,
             CuDanSeeder::class,
             ViTriDatSeeder::class,
-            XeSeeder::class,
-            LichSuRaVaoBaiXeSeeder::class,
             BaiXeSeeder::class,
+            ChiTietBaiXeSeeder::class,
+            CameraGiamSatSeeder::class,
+            BaoCaoSuCoSeeder::class,
+            BaoCaoKhachVangLaiSeeder::class,
+            // AdminThongBaoSeeder::class,
+            XeSeeder::class,
+            LoaiXeSeeder::class,
             GiaoDichSeeder::class,
-            AdminThongBaoSeeder::class,
-            LoaiXeSeeder::class
+            LichSuRaVaoBaiXeSeeder::class,
+            LoaiXeSeeder::class,
+
         ]);
     }
 }
